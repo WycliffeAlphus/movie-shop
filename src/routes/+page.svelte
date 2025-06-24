@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import MediaCard from '$lib/components/MediaCard.svelte';
     import SearchBar from '$lib/components/SearchBar.svelte';
     import ThemeToggle from '$lib/components/ThemeToggle.svelte';
@@ -33,14 +34,12 @@
         errorTrending = null;
         try {
             const data = await getTrending('all', 'week', page);
-            // Pre-fetch OMDB data for all items
             const itemsWithOmdb = await Promise.all(
                 data.results.map(async (item) => {
                     const omdbData = item.imdb_id ? await getOmdbDetails(item.imdb_id) : null;
                     return { tmdb: item, omdb: omdbData };
                 })
             );
-            // Filter and map data
             trending = itemsWithOmdb
                 .filter(({ tmdb, omdb }) => {
                     const releaseYear = (tmdb.release_date || tmdb.first_air_date || '').split('-')[0];
@@ -51,7 +50,7 @@
                         (!filters.runtime || (runtime !== Infinity && runtime <= filters.runtime))
                     );
                 })
-                .slice(0, 5) // Limit to 5 items for one line
+                .slice(0, 5)
                 .map(({ tmdb, omdb }) => mapMediaData(tmdb, omdb));
             trendingPage = page;
             trendingTotalPages = data.total_pages;
@@ -68,7 +67,6 @@
             const movieGenres = await getGenres('movie');
             const tvGenres = await getGenres('tv');
             genres = [...new Set([...movieGenres.genres, ...tvGenres.genres])].sort((a, b) => a.name.localeCompare(b.name));
-            // Set default genre to Action (TMDB genre ID for Action is 28)
             const actionGenre = genres.find(genre => genre.name.toLowerCase() === 'action' && genre.id === 28);
             if (actionGenre) {
                 selectedGenre = actionGenre;
@@ -86,14 +84,12 @@
         errorGenres = null;
         try {
             const data = await getMediaByGenre(genre.id, 'movie', page);
-            // Pre-fetch OMDB data for all items
             const itemsWithOmdb = await Promise.all(
                 data.results.map(async (item) => {
                     const omdbData = item.imdb_id ? await getOmdbDetails(item.imdb_id) : null;
                     return { tmdb: item, omdb: omdbData };
                 })
             );
-            // Filter and map data
             genreMedia = itemsWithOmdb
                 .filter(({ tmdb, omdb }) => {
                     const releaseYear = (tmdb.release_date || tmdb.first_air_date || '').split('-')[0];
@@ -128,14 +124,12 @@
         errorSearch = null;
         try {
             const data = await searchMedia(query, page);
-            // Pre-fetch OMDB data for all items
             const itemsWithOmdb = await Promise.all(
                 data.results.map(async (item) => {
                     const omdbData = item.imdb_id ? await getOmdbDetails(item.imdb_id) : null;
                     return { tmdb: item, omdb: omdbData };
                 })
             );
-            // Filter and map data
             searchResults = itemsWithOmdb
                 .filter(({ tmdb, omdb }) => {
                     const releaseYear = (tmdb.release_date || tmdb.first_air_date || '').split('-')[0];
@@ -174,7 +168,7 @@
 
     function handleGenreSelect(genre) {
         selectedGenre = genre;
-        genrePage = 1; // Reset to first page
+        genrePage = 1;
         loadGenreMedia(genre);
     }
 
@@ -188,6 +182,12 @@
     <header class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Movie Discovery</h1>
         <div class="flex items-center gap-4">
+            <button
+                on:click={() => goto('/watchlist')}
+                class="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+            >
+                View Watchlist
+            </button>
             <ThemeToggle />
             <SearchBar bind:query={searchQuery} on:search={(e) => handleSearch(e.detail.query)} />
         </div>
@@ -356,7 +356,6 @@
 </div>
 
 <style lang="css">
-    /* Local styles for responsiveness */
     header {
         @apply flex-wrap gap-4;
     }
