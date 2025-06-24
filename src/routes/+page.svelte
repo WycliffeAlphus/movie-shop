@@ -180,7 +180,7 @@
 
 <div class="container py-8">
     <header class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Movie Discovery</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Movie Shop</h1>
         <div class="flex items-center gap-4">
             <button
                 on:click={() => goto('/watchlist')}
