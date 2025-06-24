@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --background: #ffffff;
+    --foreground: #1f2937;
+}
+
+.dark {
+    --background: #1f2937;
+    --foreground: #f3f4f6;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    @apply bg-[var(--background)] text-[var(--foreground)];
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Ensure cards are responsive */
+.card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden;
+    width: 100%;
+    max-width: 200px;
+}
+
+@media (min-width: 640px) {
+    .card {
+        max-width: 240px;
+    }
+}

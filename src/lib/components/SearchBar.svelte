@@ -8,19 +8,26 @@
     const handleSearch = debounce(async (value) => {
         if (value.length >= 2) {
             isSearching = true;
-            await goto(`/search?q=${encodeURIComponent(value)}`);
-            isSearching = false;
+            try {
+                await goto(`/search?q=${encodeURIComponent(value)}`);
+            } catch (err) {
+                console.error('Navigation error:', err);
+            } finally {
+                isSearching = false;
+            }
+        } else if (!value) {
+            await goto('/');
         }
     }, 300);
 </script>
 
-<div class="relative w-full max-w-2xl mx-auto">
+<div class="relative w-full max-w-md">
     <input
         type="text"
         bind:value={query}
         on:input={() => handleSearch(query)}
         placeholder="Search movies and TV shows..."
-        class="w-full px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
     />
     {#if isSearching}
         <span class="absolute right-4 top-1/2 transform -translate-y-1/2">

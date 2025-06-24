@@ -14,11 +14,15 @@ async function fetchWithCache(url, options = {}) {
         });
 
         if (response.status === 429) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            const retryAfter = parseInt(response.headers.get('Retry-After') || '1', 10);
+            await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
             return fetchWithCache(url, options);
         }
 
-        if (!response.ok) throw new Error('API request failed');
+        if (!response.ok) {
+            throw new Error(`API request failed with status ${response.status}`);
+        }
+
         const data = await response.json();
         cache.set(cacheKey, data);
         return data;
@@ -29,6 +33,7 @@ async function fetchWithCache(url, options = {}) {
 }
 
 export async function searchMedia(query, page = 1) {
+    if (!query) return { results: [], total_pages: 1 };
     return fetchWithCache(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`);
 }
 
@@ -37,7 +42,7 @@ export async function getTrending(type = 'all', timeWindow = 'week') {
 }
 
 export async function getMediaDetails(id, type) {
-    return fetchWithCache(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}&append_to_response=credits,watch/providers,videos`);
+    return fetchWithCache(`${BASE_URL}/${type}/${id}?api_key=${API_KEY}&append_to_response=credits,watch/providers,videos,external_ids`);
 }
 
 export async function getGenres(type) {
