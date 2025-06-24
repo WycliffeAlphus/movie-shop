@@ -41,7 +41,7 @@ A modern, responsive entertainment discovery platform built with SvelteKit that 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/WycliffeAlphus/movie-shop
    cd movie-shop
    ```
 
