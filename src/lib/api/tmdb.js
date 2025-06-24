@@ -37,8 +37,8 @@ export async function searchMedia(query, page = 1) {
     return fetchWithCache(`${BASE_URL}/search/multi?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`);
 }
 
-export async function getTrending(type = 'all', timeWindow = 'week') {
-    return fetchWithCache(`${BASE_URL}/trending/${type}/${timeWindow}?api_key=${API_KEY}`);
+export async function getTrending(type = 'all', timeWindow = 'week', page = 1) {
+    return fetchWithCache(`${BASE_URL}/trending/${type}/${timeWindow}?api_key=${API_KEY}&page=${page}`);
 }
 
 export async function getMediaDetails(id, type) {
@@ -47,4 +47,8 @@ export async function getMediaDetails(id, type) {
 
 export async function getGenres(type) {
     return fetchWithCache(`${BASE_URL}/genre/${type}/list?api_key=${API_KEY}`);
+}
+
+export async function getMediaByGenre(genreId, mediaType = 'movie', page = 1) {
+    return fetchWithCache(`${BASE_URL}/discover/${mediaType}?api_key=${API_KEY}&with_genres=${genreId}&page=${page}`);
 }
