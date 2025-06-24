@@ -31,7 +31,14 @@
             const data = await getTrending('all', 'week', page);
             trending = await Promise.all(
                 data.results
-                    .filter(item => !filters.rating || item.vote_average >= filters.rating)
+                    .filter(item => {
+                        const releaseYear = (item.release_date || item.first_air_date || '').split('-')[0];
+                        return (
+                            (!filters.rating || item.vote_average >= filters.rating) &&
+                            (!filters.year || (releaseYear && releaseYear === filters.year.toString())) &&
+                            (!filters.runtime || (item.runtime && item.runtime <= filters.runtime))
+                        );
+                    })
                     .slice(0, 5) // Limit to 5 items for one line
                     .map(async (item) => {
                         const omdbData = item.imdb_id ? await getOmdbDetails(item.imdb_id) : null;
@@ -73,7 +80,14 @@
             const data = await getMediaByGenre(genre.id, 'movie', page);
             genreMedia = await Promise.all(
                 data.results
-                    .filter(item => !filters.rating || item.vote_average >= filters.rating)
+                    .filter(item => {
+                        const releaseYear = (item.release_date || item.first_air_date || '').split('-')[0];
+                        return (
+                            (!filters.rating || item.vote_average >= filters.rating) &&
+                            (!filters.year || (releaseYear && releaseYear === filters.year.toString())) &&
+                            (!filters.runtime || (item.runtime && item.runtime <= filters.runtime))
+                        );
+                    })
                     .map(async (item) => {
                         const omdbData = item.imdb_id ? await getOmdbDetails(item.imdb_id) : null;
                         return mapMediaData(item, omdbData);
