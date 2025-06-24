@@ -2,6 +2,8 @@
 
 A modern, responsive entertainment discovery platform built with SvelteKit that allows users to search, discover, and manage their favorite movies and TV shows.
 
+![](static/Home.png)
+
 ## ✨ Features
 
 - **🔍 Smart Search**: Search across movies and TV shows with real-time results
@@ -298,6 +300,8 @@ The application uses a unified media object structure created by the `mapMediaDa
 #### `MediaCard.svelte`
 Displays movie/TV show information in a card format.
 
+![](static/cards.png)
+
 **Props:**
 - `media` (object): Media object with title, poster, rating, etc.
 
@@ -309,7 +313,7 @@ Displays movie/TV show information in a card format.
 
 #### `SearchBar.svelte`
 Search input component with debounced search functionality.
-
+![](static/search.png)
 **Props:**
 - `query` (string): Current search query (bindable)
 
@@ -318,6 +322,8 @@ Search input component with debounced search functionality.
 
 #### `FilterPanel.svelte`
 Advanced filtering controls for content discovery.
+
+![](static/filter.png)
 
 **Props:**
 - `filters` (object): Current filter values
@@ -330,7 +336,7 @@ Advanced filtering controls for content discovery.
 
 #### `WatchlistButton.svelte`
 Add/remove items from personal watchlist.
-
+![](static/watchlist.png)
 **Props:**
 - `media` (object): Media item to add/remove
 
@@ -340,7 +346,8 @@ Add/remove items from personal watchlist.
 
 #### `ThemeToggle.svelte`
 Toggle between light and dark themes.
-
+![](static/dark.png)
+![](static/light.png)
 **Features:**
 - Persistent theme preference
 - Smooth transitions
@@ -348,7 +355,7 @@ Toggle between light and dark themes.
 
 #### `TrailerModal.svelte`
 Modal component for displaying YouTube trailers.
-
+![](static/trailer.png)
 **Props:**
 - `isOpen` (boolean): Modal visibility
 - `videoId` (string): YouTube video ID
@@ -356,7 +363,7 @@ Modal component for displaying YouTube trailers.
 
 #### `ShareButton.svelte`
 Social sharing functionality for media items.
-
+![](static/share.png)
 **Props:**
 - `media` (object): Media item to share
 
