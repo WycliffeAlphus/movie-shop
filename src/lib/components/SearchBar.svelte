@@ -1,23 +1,19 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     import { debounce } from '$lib/utils/debounce';
-    import { goto } from '$app/navigation';
 
-    let query = '';
+    const dispatch = createEventDispatcher();
+    export let query = '';
     let isSearching = false;
 
-    const handleSearch = debounce(async (value) => {
-        if (value.length >= 2) {
-            isSearching = true;
-            try {
-                await goto(`/search?q=${encodeURIComponent(value)}`);
-            } catch (err) {
-                console.error('Navigation error:', err);
-            } finally {
-                isSearching = false;
-            }
-        } else if (!value) {
-            await goto('/');
-        }
+    $: if (query) {
+        isSearching = query.length >= 2;
+    } else {
+        isSearching = false;
+    }
+
+    const handleSearch = debounce((value) => {
+        dispatch('search', { query: value });
     }, 300);
 </script>
 
